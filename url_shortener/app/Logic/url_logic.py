@@ -1,12 +1,13 @@
-from .Utils import get_random_string, validate_url
+
+from .Utils import get_random_string
+from .dto import LongUrlDto, UrlDto
 from ..models import UrlEntity
 
 
-def add_long_url(long_url: str) -> UrlEntity:
-    validate_url(url=long_url)
+def add_long_url(long_url_dto: LongUrlDto) -> UrlDto:
     short_url = get_random_string(8)
-    entity = UrlEntity.objects.create(long_url=long_url, short_url=short_url)
-    return entity
+    url_dto = UrlDto(short_url=short_url, long_url=long_url_dto.long_url)
+    return UrlDto(**UrlEntity.objects.create(**url_dto.dict()).__dict__)
 
 
 def get_short_url(url: str) -> str:
